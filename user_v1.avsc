@@ -10,10 +10,6 @@
     {
       "name": "favorite_number",
       "type": ["int", "null"]
-    },
-    {
-      "name": "favorite_color",
-      "type": ["string", "null"]
     }
   ]
 }
