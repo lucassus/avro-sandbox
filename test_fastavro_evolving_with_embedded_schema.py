@@ -1,20 +1,20 @@
 from io import BytesIO
 
-from fastavro.read import schemaless_reader
+from fastavro.read import reader
 from fastavro.schema import parse_schema
-from fastavro.write import schemaless_writer
+from fastavro.write import writer
 
 
 def serialize(data: dict, schema) -> bytes:
     stream = BytesIO()
-    schemaless_writer(stream, schema, data)
+    writer(stream, schema, [data])
     stream.seek(0)
     return stream.read()
 
 
 def deserialize(data: bytes, schema) -> dict:
     stream = BytesIO(data)
-    return schemaless_reader(stream, schema)
+    return next(reader(stream, schema))
 
 
 schema_v1 = parse_schema(
