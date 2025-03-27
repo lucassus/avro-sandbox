@@ -2,6 +2,8 @@ from fastavro.read import reader
 from fastavro.schema import load_schema
 from fastavro.write import writer
 
+from models import User
+
 if __name__ == "__main__":
     schema = load_schema("schemas/sandbox.User.avsc")
 
@@ -26,5 +28,6 @@ if __name__ == "__main__":
         )
 
     with open("users.avro", "rb") as fo:
-        for record in reader(fo, schema):
+        for data in reader(fo, schema):
+            record = User.model_validate(data)
             print(record)
