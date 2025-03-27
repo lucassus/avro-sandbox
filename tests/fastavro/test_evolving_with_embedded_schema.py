@@ -1,9 +1,14 @@
 from io import BytesIO
 
 from fastavro.read import reader
+from fastavro.schema import parse_schema
 from fastavro.write import writer
 
-from tests.fastavro.schemas import schema_v1, schema_v2
+from tests.schemas import raw_schema_v1, raw_schema_v2
+
+schema_v1 = parse_schema(raw_schema_v1)
+
+schema_v2 = parse_schema(raw_schema_v2)
 
 
 def serialize(data: dict, schema) -> bytes:

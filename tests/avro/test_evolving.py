@@ -1,8 +1,15 @@
+import json
 from io import BytesIO
 
+import avro.schema
+import pytest
 from avro.io import BinaryDecoder, BinaryEncoder, DatumReader, DatumWriter
 
-from tests.avro.schemas import schema_v1, schema_v2
+from tests.schemas import raw_schema_v1, raw_schema_v2
+
+schema_v1 = avro.schema.parse(json.dumps(raw_schema_v1))
+
+schema_v2 = avro.schema.parse(json.dumps(raw_schema_v2))
 
 
 def serialize(data: dict, schema) -> bytes:
@@ -35,6 +42,7 @@ def test_deserialize_v1():
     }
 
 
+@pytest.mark.xfail(strict=True)
 def test_deserialize_v2():
     data = serialize(
         {

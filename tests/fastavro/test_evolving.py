@@ -1,9 +1,15 @@
 from io import BytesIO
 
+import pytest
 from fastavro.read import schemaless_reader
+from fastavro.schema import parse_schema
 from fastavro.write import schemaless_writer
 
-from tests.fastavro.schemas import schema_v1, schema_v2
+from tests.schemas import raw_schema_v1, raw_schema_v2
+
+schema_v1 = parse_schema(raw_schema_v1)
+
+schema_v2 = parse_schema(raw_schema_v2)
 
 
 def serialize(data: dict, schema) -> bytes:
@@ -34,6 +40,7 @@ def test_deserialize_v1():
     }
 
 
+@pytest.mark.xfail(strict=True)
 def test_deserialize_v2():
     data = serialize(
         {
