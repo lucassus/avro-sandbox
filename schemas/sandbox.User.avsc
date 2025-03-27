@@ -1,5 +1,5 @@
 {
-  "namespace": "example.avro",
+  "namespace": "sandbox",
   "type": "record",
   "name": "User",
   "fields": [
@@ -10,6 +10,10 @@
     {
       "name": "favorite_number",
       "type": ["int", "null"]
+    },
+    {
+      "name": "primary_address",
+      "type": ["sandbox.Address", "null"]
     }
   ]
 }

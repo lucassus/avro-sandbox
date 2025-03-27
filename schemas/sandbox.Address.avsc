@@ -1,0 +1,23 @@
+{
+  "namespace": "sandbox",
+  "type": "record",
+  "name": "Address",
+  "fields": [
+    {
+      "name": "street",
+      "type": "string"
+    },
+    {
+      "name": "city",
+      "type": "string"
+    },
+    {
+      "name": "state",
+      "type": "string"
+    },
+    {
+      "name": "zip",
+      "type": "string"
+    }
+  ]
+}
