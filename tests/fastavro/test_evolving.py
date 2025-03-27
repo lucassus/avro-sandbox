@@ -1,8 +1,9 @@
 from io import BytesIO
 
 from fastavro.read import schemaless_reader
-from fastavro.schema import parse_schema
 from fastavro.write import schemaless_writer
+
+from tests.fastavro.schemas import schema_v1, schema_v2
 
 
 def serialize(data: dict, schema) -> bytes:
@@ -17,32 +18,6 @@ def deserialize(data: bytes, schema) -> dict:
     return schemaless_reader(stream, schema)
 
 
-schema_v1 = parse_schema(
-    {
-        "namespace": "sandbox",
-        "type": "record",
-        "name": "User",
-        "fields": [
-            {"name": "name", "type": "string"},
-            {"name": "favorite_number", "type": ["int", "null"]},
-        ],
-    }
-)
-
-schema_v2 = parse_schema(
-    {
-        "namespace": "sandbox",
-        "type": "record",
-        "name": "User",
-        "fields": [
-            {"name": "name", "type": "string"},
-            {"name": "favorite_number", "type": ["int", "null"]},
-            {"name": "favorite_color", "type": "string", "default": "green"},
-        ],
-    }
-)
-
-
 def test_deserialize_v1():
     data = serialize(
         {
@@ -51,6 +26,7 @@ def test_deserialize_v1():
         },
         schema_v1,
     )
+    assert len(data) == 10
 
     assert deserialize(data, schema_v1) == {
         "name": "Alyssa",

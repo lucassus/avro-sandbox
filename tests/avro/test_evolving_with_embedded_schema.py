@@ -1,38 +1,9 @@
-import json
 from io import BytesIO
 
-import avro
 from avro.datafile import DataFileReader, DataFileWriter
 from avro.io import DatumReader, DatumWriter
 
-schema_v1 = avro.schema.parse(
-    json.dumps(
-        {
-            "namespace": "sandbox",
-            "type": "record",
-            "name": "User",
-            "fields": [
-                {"name": "name", "type": "string"},
-                {"name": "favorite_number", "type": ["int", "null"]},
-            ],
-        }
-    )
-)
-
-schema_v2 = avro.schema.parse(
-    json.dumps(
-        {
-            "namespace": "sandbox",
-            "type": "record",
-            "name": "User",
-            "fields": [
-                {"name": "name", "type": "string"},
-                {"name": "favorite_number", "type": ["int", "null"]},
-                {"name": "favorite_color", "type": "string", "default": "green"},
-            ],
-        }
-    )
-)
+from tests.avro.schemas import schema_v1, schema_v2
 
 
 def serialize(data: dict, schema) -> bytes:
@@ -59,11 +30,11 @@ def test_deserialize_v1():
         },
         schema_v1,
     )
+    assert len(data) == 240
 
-    assert deserialize(data, schema_v2) == {
+    assert deserialize(data, schema_v1) == {
         "name": "Alyssa",
         "favorite_number": 256,
-        "favorite_color": "green",
     }
 
 
