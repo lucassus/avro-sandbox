@@ -19,7 +19,7 @@ def serialize(data: dict, schema) -> bytes:
     return stream.getvalue()
 
 
-def deserialize(data: bytes, writer_schema, reader_schema) -> dict:
+def deserialize(data: bytes, *, writer_schema, reader_schema) -> dict:
     decoder = BinaryDecoder(BytesIO(data))
     reader = DatumReader(writer_schema, reader_schema)
     return reader.read(decoder)

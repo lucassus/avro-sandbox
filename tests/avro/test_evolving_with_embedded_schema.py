@@ -22,13 +22,13 @@ def serialize(data: dict, schema) -> bytes:
     return serialized
 
 
-def deserialize(data: bytes, schema) -> dict:
+def deserialize(data: bytes, *, reader_schema) -> dict:
     stream = BytesIO(data)
-    reader = DataFileReader(stream, DatumReader(readers_schema=schema))
+    reader = DataFileReader(stream, DatumReader(readers_schema=reader_schema))
     return next(reader)
 
 
-def test_deserialize_v1():
+def test_deserialize_v1_v1():
     data = serialize(
         {
             "name": "Alyssa",
@@ -38,13 +38,13 @@ def test_deserialize_v1():
     )
     assert len(data) == 240
 
-    assert deserialize(data, schema_v1) == {
+    assert deserialize(data, reader_schema=schema_v1) == {
         "name": "Alyssa",
         "favorite_number": 256,
     }
 
 
-def test_deserialize_v2():
+def test_deserialize_v1_v2():
     data = serialize(
         {
             "name": "Alyssa",
@@ -53,8 +53,24 @@ def test_deserialize_v2():
         schema_v1,
     )
 
-    assert deserialize(data, schema_v2) == {
+    assert deserialize(data, reader_schema=schema_v2) == {
         "name": "Alyssa",
         "favorite_number": 256,
         "favorite_color": "green",
+    }
+
+
+def test_deserialize_v2_v1():
+    data = serialize(
+        {
+            "name": "Alyssa",
+            "favorite_number": 256,
+            "favorite_color": "red",
+        },
+        schema_v2,
+    )
+
+    assert deserialize(data, reader_schema=schema_v1) == {
+        "name": "Alyssa",
+        "favorite_number": 256,
     }
